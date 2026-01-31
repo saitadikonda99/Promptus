@@ -4,6 +4,7 @@ import type {
   Framework,
   PromptConfig,
 } from "./types";
+import { capitalize } from "./utils";
 import { getTemplate, PLACEHOLDERS } from "./templates";
 
 /** Capitalize first letter for display (e.g. "nextjs" → "Next.js"). */
@@ -28,17 +29,12 @@ function formatCssFramework(css: CssFramework): string {
   return labels[css];
 }
 
-/** Component display label (capitalize). */
-function componentLabel(c: Component): string {
-  return c.charAt(0).toUpperCase() + c.slice(1);
-}
-
 /** Build bullet list of component names. Handles empty list. */
 export function formatComponents(components: Component[]): string {
   if (components.length === 0) {
     return "None specified. Suggest a minimal set (e.g. Navbar, Hero, Footer) based on page type.";
   }
-  return components.map((c) => `- ${componentLabel(c)}`).join("\n");
+  return components.map((c) => `- ${capitalize(c)}`).join("\n");
 }
 
 /** Detailed component descriptions: layout, purpose, UI structure, interaction hints. */
@@ -61,7 +57,7 @@ function buildComponentDetails(components: Component[]): string {
     return "";
   }
   return components
-    .map((c) => `**${componentLabel(c)}:** ${COMPONENT_DETAIL_MAP[c]}`)
+    .map((c) => `**${capitalize(c)}:** ${COMPONENT_DETAIL_MAP[c]}`)
     .join("\n\n");
 }
 

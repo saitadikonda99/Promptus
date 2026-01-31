@@ -3,7 +3,7 @@
  * Never blocks UI; fails silently if storage is unavailable.
  */
 
-const STORAGE_KEY = "promptforge-analytics";
+const STORAGE_KEY = "promptus-analytics";
 const MAX_EVENTS = 200;
 
 export interface AnalyticsEvent {

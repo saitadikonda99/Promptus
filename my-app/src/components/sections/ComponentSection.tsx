@@ -3,7 +3,7 @@
 import type { Component, PromptConfig } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { capitalize, cn } from "@/lib/utils";
 
 export interface ComponentSectionProps {
   config: PromptConfig;
@@ -22,10 +22,6 @@ const ALL_COMPONENTS: Component[] = [
   "table",
   "footer",
 ];
-
-function componentLabel(value: Component): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
 
 export default function ComponentSection({
   config,
@@ -61,7 +57,7 @@ export default function ComponentSection({
                 htmlFor={`component-${component}`}
                 className="cursor-pointer flex-1 font-normal text-foreground text-sm"
               >
-                {componentLabel(component)}
+                {capitalize(component)}
               </Label>
             </div>
           );

@@ -11,7 +11,7 @@ import {
 import { trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "promptus-prompt-config";
-const STEP_STORAGE_KEY = "promptforge-current-step";
+const STEP_STORAGE_KEY = "promptus-current-step";
 
 const MIN_STEP = 1;
 
