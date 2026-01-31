@@ -51,14 +51,35 @@ const BOLT = `Create a {{PAGE_TYPE}} experience optimized for the Bolt stack. Fo
 ${BASE_BODY}
 `.trim();
 
-const CHATGPT = `Build a complete, production-ready {{PAGE_TYPE}} application. Output code that is maintainable and follows best practices.
+const VIBECODING_BODY = `
+**Page type:** {{PAGE_TYPE}}
 
-${BASE_BODY}
+**Stack:** {{FRAMEWORK}} with {{CSS_FRAMEWORK}} for styling.
+
+**Theme:** {{THEME}}. Primary color: {{PRIMARY_COLOR}}, accent: {{ACCENT_COLOR}}. Design style: {{DESIGN_STYLE}}.
+
+**Sections to build (component-based):** {{COMPONENTS_LIST}}
+
+{{COMPONENT_DETAILS}}
+
+**Implementation approach:**
+1. Explain each step before writing code (what we're building and why).
+2. Provide developer guidance: clean architecture, separation of concerns, naming conventions.
+3. Include brief comments and reasoning hints in code so the developer learns while building.
+4. Generate prompts that guide coding step-by-step, like a mentor helping build features—both tell the builder what to build and help developers understand the code.
+
+**Requirements:**
+- Use a component-based architecture: one component per section, reusable UI primitives.
+- Write clean, production-ready code. Prefer composition over duplication.
+- Layout: {{RESPONSIVE}}
+- Animations: {{ANIMATIONS}}
+- Accessibility: {{ACCESSIBILITY}}
+- Output: {{OUTPUT_FORMAT}}
 `.trim();
 
-const CURSOR = `Generate a {{PAGE_TYPE}} codebase suitable for IDE workflows. Use a component-based structure so files stay focused and easy to navigate.
+const VIBECODING = `You are a coding mentor helping build a {{PAGE_TYPE}} application. Guide step-by-step: explain implementation steps, provide developer guidance, encourage clean architecture, and include comments and reasoning hints so the developer understands the code while building.
 
-${BASE_BODY}
+${VIBECODING_BODY}
 `.trim();
 
 const GENERIC = `Produce a professional {{PAGE_TYPE}} application. Use a component-based architecture and write clean, reusable code.
@@ -70,8 +91,7 @@ const TEMPLATES: Record<BuilderMode, string> = {
   lovable: LOVABLE,
   v0: V0,
   bolt: BOLT,
-  chatgpt: CHATGPT,
-  cursor: CURSOR,
+  vibecoding: VIBECODING,
   generic: GENERIC,
 };
 
@@ -79,9 +99,12 @@ const TEMPLATES: Record<BuilderMode, string> = {
  * Returns the prompt template for the given builder mode.
  * Templates include placeholders for page type, framework, theme, colors, design style,
  * components list and details, responsive/animations/accessibility, and output format.
+ * Falls back to vibecoding for unknown/legacy modes (e.g. chatgpt, cursor).
  */
-export function getTemplate(builderMode: BuilderMode): string {
-  return TEMPLATES[builderMode];
+export function getTemplate(builderMode: BuilderMode | string): string {
+  return builderMode in TEMPLATES
+    ? TEMPLATES[builderMode as BuilderMode]
+    : TEMPLATES.vibecoding;
 }
 
 export { PLACEHOLDERS };

@@ -5,6 +5,7 @@ import {
   type Component,
   type PromptConfig,
   DEFAULT_CONFIG,
+  normalizePromptConfig,
 } from "@/lib/types";
 
 const STORAGE_KEY = "promptus-prompt-config";
@@ -29,7 +30,7 @@ export function decodeConfig(encoded: string): PromptConfig | null {
     if (!isPlainObject(parsed)) return null;
     if (!("version" in parsed) || !("framework" in parsed) || !("components" in parsed)) return null;
     if (!isStringArray(parsed.components)) return null;
-    return { ...DEFAULT_CONFIG, ...parsed } as PromptConfig;
+    return normalizePromptConfig({ ...DEFAULT_CONFIG, ...parsed } as PromptConfig);
   } catch {
     return null;
   }
@@ -68,7 +69,7 @@ function loadConfigFromStorage(): PromptConfig {
       "components" in parsed &&
       isStringArray(parsed.components)
     ) {
-      return { ...DEFAULT_CONFIG, ...parsed } as PromptConfig;
+      return normalizePromptConfig({ ...DEFAULT_CONFIG, ...parsed } as PromptConfig);
     }
   } catch {
     // Invalid or missing; use default

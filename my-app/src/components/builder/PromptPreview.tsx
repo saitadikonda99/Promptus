@@ -22,8 +22,7 @@ const BUILDER_MODE_OPTIONS: { value: BuilderMode; label: string }[] = [
   { value: "lovable", label: "Lovable" },
   { value: "v0", label: "v0" },
   { value: "bolt", label: "Bolt" },
-  { value: "cursor", label: "Cursor" },
-  { value: "chatgpt", label: "ChatGPT" },
+  { value: "vibecoding", label: "Vibecoding" },
   { value: "generic", label: "Generic" },
 ];
 

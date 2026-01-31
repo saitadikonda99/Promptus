@@ -30,9 +30,24 @@ export type BuilderMode =
   | "lovable"
   | "v0"
   | "bolt"
-  | "chatgpt"
-  | "cursor"
+  | "vibecoding"
   | "generic";
+
+const VALID_BUILDER_MODES: readonly BuilderMode[] = [
+  "lovable",
+  "v0",
+  "bolt",
+  "vibecoding",
+  "generic",
+];
+
+/** Normalize config so builderMode is always a current mode (handles legacy chatgpt/cursor). */
+export function normalizePromptConfig(config: PromptConfig): PromptConfig {
+  if ((VALID_BUILDER_MODES as readonly string[]).includes(config.builderMode)) {
+    return config;
+  }
+  return { ...config, builderMode: "vibecoding" };
+}
 
 export type Component =
   | "navbar"
@@ -101,6 +116,6 @@ export const DEFAULT_CONFIG: PromptConfig = {
     outputFormat: "code-only",
     codeStructure: "component-based",
   
-    builderMode: "generic",
+    builderMode: "vibecoding",
   };
   
