@@ -1,12 +1,10 @@
+import DocsContent from "@/components/docs/DocsContent";
+
 export default function VibecodingPage() {
   return (
-    <article>
-      <h1 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-        Vibecoding Guide
-      </h1>
-      <p className="mt-4 text-muted-foreground">
-        Documentation content coming soon.
-      </p>
-    </article>
+    <DocsContent>
+      <h1>Vibecoding Guide</h1>
+      <p>Documentation content coming soon.</p>
+    </DocsContent>
   );
 }
