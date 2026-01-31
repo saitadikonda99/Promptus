@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import DocsHeader from "@/components/docs/DocsHeader";
 import DocsSidebar from "@/components/docs/DocsSidebar";
 import DocsPageNav from "@/components/docs/DocsPageNav";
+import DocsToc from "@/components/docs/DocsToc";
 
 export default function DocsLayout({
   children,
@@ -40,16 +41,22 @@ export default function DocsLayout({
         />
       )}
 
-      {/* Main: header + content + page nav */}
+      {/* Main: header + content + ToC */}
       <main className="min-h-0 flex-1 overflow-y-auto flex flex-col">
         <DocsHeader
           searchValue={searchQuery}
           onSearchChange={setSearchQuery}
           onMenuClick={() => setSidebarOpen(true)}
         />
-        <div className="max-w-3xl flex-1 px-4 py-8 md:px-8 md:py-10">
-          {children}
-          <DocsPageNav />
+        <div className="flex flex-1 gap-0 lg:gap-4">
+          <div
+            id="docs-content"
+            className="min-w-0 flex-1 px-4 py-8 md:px-8 md:py-10 max-w-3xl"
+          >
+            {children}
+            <DocsPageNav />
+          </div>
+          <DocsToc />
         </div>
       </main>
     </div>
