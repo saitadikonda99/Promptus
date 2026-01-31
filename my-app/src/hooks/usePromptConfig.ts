@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   type Component,
   type PromptConfig,
@@ -41,9 +41,21 @@ function saveConfigToStorage(config: PromptConfig): void {
 }
 
 export function usePromptConfig() {
-  const [config, setConfigState] = useState<PromptConfig>(loadConfigFromStorage);
+  // Initialize with DEFAULT_CONFIG so server and client first paint match (avoids hydration mismatch).
+  const [config, setConfigState] = useState<PromptConfig>(DEFAULT_CONFIG);
+  const skipNextSave = useRef(true);
 
+  // After mount, load from localStorage (client-only).
   useEffect(() => {
+    setConfigState(loadConfigFromStorage());
+  }, []);
+
+  // Persist on change; skip the first run to avoid overwriting storage before load runs.
+  useEffect(() => {
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return;
+    }
     saveConfigToStorage(config);
   }, [config]);
 
