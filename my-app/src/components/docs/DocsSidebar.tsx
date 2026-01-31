@@ -3,23 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-
-const DOC_LINKS = [
-  { href: "/docs/getting-started", label: "Getting Started" },
-  { href: "/docs/vibecoding", label: "Vibecoding Guide" },
-  { href: "/docs/builders", label: "AI Builders Guide" },
-  { href: "/docs/prompt-guide", label: "Prompt Writing Guide" },
-] as const;
+import { filterDocsByQuery } from "@/lib/docs-nav";
 
 export interface DocsSidebarProps {
   /** Called when a nav link is clicked (e.g. to close mobile drawer). */
   onNavigate?: () => void;
   /** Optional class name for the root aside. */
   className?: string;
+  /** Optional search query to filter nav links by title. */
+  searchQuery?: string;
 }
 
-export default function DocsSidebar({ onNavigate, className }: DocsSidebarProps) {
+export default function DocsSidebar({
+  onNavigate,
+  className,
+  searchQuery = "",
+}: DocsSidebarProps) {
   const pathname = usePathname();
+  const links = filterDocsByQuery(searchQuery);
 
   return (
     <aside
@@ -39,25 +40,31 @@ export default function DocsSidebar({ onNavigate, className }: DocsSidebarProps)
           Promptus Docs
         </h2>
         <nav className="flex flex-col gap-0.5" aria-label="Documentation">
-          {DOC_LINKS.map(({ href, label }) => {
-            const isActive =
-              pathname === href || pathname.startsWith(href + "/");
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={onNavigate}
-                className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                )}
-              >
-                {label}
-              </Link>
-            );
-          })}
+          {links.length === 0 ? (
+            <p className="px-3 py-2 text-xs text-muted-foreground">
+              No matching pages.
+            </p>
+          ) : (
+            links.map(({ href, label }) => {
+              const isActive =
+                pathname === href || pathname.startsWith(href + "/");
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={onNavigate}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  )}
+                >
+                  {label}
+                </Link>
+              );
+            })
+          )}
         </nav>
       </div>
     </aside>
