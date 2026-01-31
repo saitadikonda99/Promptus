@@ -114,6 +114,26 @@ ${BASE_BODY}
 - **Error handling:** Try-catch in API routes, error boundaries in UI, user-friendly error messages.
 `.trim();
 
+const EMERGENT = `# Emergent AI Prompt — {{PAGE_TYPE}}
+
+Create a **modern, production-ready** {{PAGE_TYPE}} application with Emergent AI. Focus on clean structure, fast iteration, and deploy-ready code.
+
+${BASE_BODY}
+
+## Emergent AI–Specific Guidelines
+- **App structure:**
+  \`\`\`
+  app/ or pages/   → Routes and layouts
+  components/       → UI and feature components
+  lib/              → Utilities, hooks, API helpers
+  \`\`\`
+- **Component patterns:** Reusable UI primitives, composition over duplication. Clear props and typed interfaces.
+- **Styling:** Use {{CSS_FRAMEWORK}} consistently. Theme tokens or CSS variables for colors and spacing.
+- **Data and API:** Fetch data in Server Components or via hooks. Use typed responses and error handling.
+- **Responsive:** Mobile-first layout. Touch-friendly targets, readable typography, no horizontal scroll.
+- **Production-ready:** Loading and error states, accessible markup, clean naming. Ship-ready output.
+`.trim();
+
 const VIBECODING_BODY = `
 {{PROJECT_DESCRIPTION}}## Project Overview
 **Page type:** {{PAGE_TYPE}}
@@ -230,6 +250,7 @@ const TEMPLATES: Record<BuilderMode, string> = {
   lovable: LOVABLE,
   v0: V0,
   bolt: BOLT,
+  emergent: EMERGENT,
   vibecoding: VIBECODING,
   generic: GENERIC,
 };

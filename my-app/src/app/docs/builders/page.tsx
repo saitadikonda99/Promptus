@@ -15,6 +15,7 @@ export default function BuildersPage() {
         <li>Lovable</li>
         <li>v0</li>
         <li>Bolt</li>
+        <li>Emergent AI</li>
         <li>Vibecoding workflow</li>
         <li>Generic AI builders</li>
       </ul>
@@ -43,6 +44,14 @@ export default function BuildersPage() {
         behavior in addition to the UI.
       </p>
 
+      <h2>Emergent AI Usage</h2>
+      <p>
+        Emergent AI is for modern, production-ready apps with clean structure
+        and fast iteration. Prompts emphasize component patterns, styling
+        consistency, and deploy-ready output. Use Emergent AI mode when you
+        want prompts tailored to Emergent AI&apos;s conventions and workflow.
+      </p>
+
       <h2>Vibecoding Usage</h2>
       <p>
         Vibecoding is a step-by-step builder workflow (often used with Cursor).
@@ -56,7 +65,7 @@ export default function BuildersPage() {
         Generic mode produces prompts that work in ChatGPT, Claude, or other
         conversational AI tools. The output is framework-agnostic and focuses on
         clear structure and requirements. Use Generic when you&apos;re pasting
-        into a general-purpose AI that isn&apos;t tied to Lovable, v0, or Bolt.
+        into a general-purpose AI that isn&apos;t tied to Lovable, v0, Bolt, or Emergent AI.
       </p>
 
       <h2>Choosing the Right Builder</h2>
@@ -72,6 +81,9 @@ export default function BuildersPage() {
         <li>
           <strong>Bolt</strong> — Full-stack, APIs, server actions. Pick Bolt
           mode when you need backend and data in the same flow.
+        </li>
+        <li>
+          <strong>Emergent AI</strong> — Modern apps, clean structure, production-ready. Pick Emergent AI mode when building with Emergent AI.
         </li>
         <li>
           <strong>Vibecoding</strong> — Step-by-step in Cursor (or similar). Pick

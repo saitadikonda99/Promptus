@@ -15,7 +15,7 @@ const DOC_CARDS = [
   {
     href: "/docs/builders",
     title: "AI Builders Guide",
-    description: "Lovable, v0, Bolt, Vibecoding, and generic builders.",
+    description: "Lovable, v0, Bolt, Emergent AI, Vibecoding, and generic builders.",
   },
   {
     href: "/docs/prompt-guide",
@@ -41,7 +41,7 @@ export default function DocsPage() {
       <p>
         Promptus helps you generate optimized prompts for AI website builders.
         Describe your project, configure components and style, then copy or
-        download a prompt tailored to Lovable, v0, Bolt, Vibecoding, or generic
+        download a prompt tailored to Lovable, v0, Bolt, Emergent AI, Vibecoding, or generic
         AI tools. This documentation explains how to get started, use each
         builder, and write better prompts.
       </p>
@@ -64,7 +64,7 @@ export default function DocsPage() {
         </li>
         <li>
           <strong>Build with your AI builder</strong> — Paste the prompt into
-          Lovable, v0, Bolt, Cursor (Vibecoding), or any generic AI builder to
+          Lovable, v0, Bolt, Emergent AI, Cursor (Vibecoding), or any generic AI builder to
           generate or refine your app.
         </li>
       </ol>

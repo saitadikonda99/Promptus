@@ -9,7 +9,7 @@ export default function GettingStartedPage() {
       <p>
         PromptForge generates optimized prompts for AI website builders. You
         describe your project, pick components and style, and get ready-to-paste
-        prompts tailored to your chosen builder (Lovable, v0, Bolt, Vibecoding,
+        prompts tailored to your chosen builder (Lovable, v0, Bolt, Emergent AI, Vibecoding,
         or generic AI).
       </p>
 
@@ -40,7 +40,7 @@ export default function GettingStartedPage() {
         </li>
         <li>
           <strong>Use prompts in builder</strong> — Paste the prompt into
-          Lovable, v0, Bolt, Cursor (Vibecoding), or any generic AI builder to
+          Lovable, v0, Bolt, Emergent AI, Cursor (Vibecoding), or any generic AI builder to
           generate or refine your app.
         </li>
         <li>
@@ -55,6 +55,7 @@ export default function GettingStartedPage() {
         <li>Lovable</li>
         <li>v0</li>
         <li>Bolt</li>
+        <li>Emergent AI</li>
         <li>Vibecoding (Cursor)</li>
         <li>Generic AI builders</li>
       </ul>
@@ -62,7 +63,7 @@ export default function GettingStartedPage() {
       <h2>Tips for Best Results</h2>
       <ul>
         <li>Write a clear project description; it influences both the prompt text and suggested components.</li>
-        <li>Pick the builder mode that matches where you’ll paste the prompt (Lovable, v0, Bolt, Vibecoding, or Generic).</li>
+        <li>Pick the builder mode that matches where you’ll paste the prompt (Lovable, v0, Bolt, Emergent AI, Vibecoding, or Generic).</li>
         <li>Start with a preset, then tweak components and style instead of building from scratch.</li>
         <li>Use &quot;Copy&quot; or &quot;Download&quot; to save the prompt and paste it in one go.</li>
         <li>For Vibecoding, follow the step-by-step format and use &quot;Say next when done&quot; between steps.</li>

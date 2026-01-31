@@ -30,6 +30,7 @@ export type BuilderMode =
   | "lovable"
   | "v0"
   | "bolt"
+  | "emergent"
   | "vibecoding"
   | "generic";
 
@@ -37,6 +38,7 @@ const VALID_BUILDER_MODES: readonly BuilderMode[] = [
   "lovable",
   "v0",
   "bolt",
+  "emergent",
   "vibecoding",
   "generic",
 ];

@@ -29,7 +29,7 @@ export default function ExamplesPage() {
           links.
         </li>
         <li>
-          <strong>Builder output:</strong> Paste into Lovable, v0, or Bolt; you
+          <strong>Builder output:</strong> Paste into Lovable, v0, Bolt, or Emergent AI; you
           get a single-page landing layout ready to connect to your backend or
           auth.
         </li>

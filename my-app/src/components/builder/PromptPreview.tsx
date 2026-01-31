@@ -31,6 +31,7 @@ const BUILDER_MODE_OPTIONS: { value: BuilderMode; label: string }[] = [
   { value: "lovable", label: "Lovable" },
   { value: "v0", label: "v0" },
   { value: "bolt", label: "Bolt" },
+  { value: "emergent", label: "Emergent AI" },
   { value: "vibecoding", label: "Vibecoding" },
   { value: "generic", label: "Generic" },
 ];
