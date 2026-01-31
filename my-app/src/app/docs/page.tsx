@@ -27,6 +27,12 @@ export default function DocsPage() {
           — Onboarding and basic workflow.
         </li>
         <li>
+          <Link href="/docs/examples">
+            Examples
+          </Link>
+          — Real use cases and expected output.
+        </li>
+        <li>
           <Link href="/docs/vibecoding">
             Vibecoding Guide
           </Link>

@@ -2,6 +2,7 @@
 export const DOC_PAGES = [
   { href: "/docs", label: "Documentation" },
   { href: "/docs/getting-started", label: "Getting Started" },
+  { href: "/docs/examples", label: "Examples" },
   { href: "/docs/vibecoding", label: "Vibecoding Guide" },
   { href: "/docs/builders", label: "AI Builders Guide" },
   { href: "/docs/prompt-guide", label: "Prompt Writing Guide" },
