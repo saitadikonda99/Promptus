@@ -102,14 +102,13 @@ export default function DocsToc({ className }: DocsTocProps) {
   return (
     <aside
       className={cn(
-        "hidden w-52 shrink-0 pl-8 pt-8 lg:block",
-        "sticky top-[57px] self-start",
-        "max-h-[calc(100vh-6rem)] overflow-y-auto",
+        "hidden h-full w-52 shrink-0 flex-col pl-8 pt-8 lg:flex",
+        "overflow-hidden",
         className
       )}
       aria-label="On this page"
     >
-      <nav className="flex flex-col gap-1 border-l border-border/60 pl-2">
+      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto border-l border-border/60 pl-2 pb-8">
         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           On this page
         </p>
