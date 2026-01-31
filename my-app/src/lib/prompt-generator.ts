@@ -114,7 +114,7 @@ function mergeComponents(selected: Component[], inferred: Component[]): Componen
 
 /**
  * Generate final prompt text from config: template + placeholder replacement + cleanup.
- * Uses projectDescription for "User Intent" and merges inferred components from description.
+ * Uses projectDescription for "Context" and merges inferred components from description.
  */
 export function generatePrompt(config: PromptConfig): string {
   const template = getTemplate(config.builderMode);
@@ -127,7 +127,7 @@ export function generatePrompt(config: PromptConfig): string {
 
   const descriptionBlock =
     config.projectDescription?.trim() ?
-      `## User Intent\n"${config.projectDescription.trim()}"\n\n`
+      `## Context\n"${config.projectDescription.trim()}"\n\n`
     : "";
 
   const replacements: Record<string, string> = {

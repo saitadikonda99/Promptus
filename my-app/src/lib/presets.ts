@@ -79,15 +79,19 @@ export const PRESETS: Record<PresetKey, Partial<PromptConfig>> = {
 /**
  * Merge a preset into the current config. Preserves version and fills
  * unspecified fields from DEFAULT_CONFIG so the result is a full PromptConfig.
+ * Components are not overwritten: current component selection is kept.
  */
 export function applyPreset(
   currentConfig: PromptConfig,
   presetConfig: Partial<PromptConfig>
 ): PromptConfig {
+  const { components: _presetComponents, ...presetWithoutComponents } =
+    presetConfig as Partial<PromptConfig> & { components?: PromptConfig["components"] };
   const merged: PromptConfig = {
     ...DEFAULT_CONFIG,
     ...currentConfig,
-    ...presetConfig,
+    ...presetWithoutComponents,
+    components: currentConfig.components,
     version: "1.0",
   };
   merged.colorScheme = {

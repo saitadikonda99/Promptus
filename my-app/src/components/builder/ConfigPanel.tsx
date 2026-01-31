@@ -13,14 +13,12 @@ export interface ConfigPanelProps {
   config: PromptConfig;
   updateConfig: (partial: Partial<PromptConfig>) => void;
   toggleComponent: (component: Component) => void;
-  resetConfig: () => void;
 }
 
 export default function ConfigPanel({
   config,
   updateConfig,
   toggleComponent,
-  resetConfig,
 }: ConfigPanelProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col divide-y divide-border/60">
@@ -47,7 +45,6 @@ export default function ConfigPanel({
         <PresetSelector
           config={config}
           updateConfig={updateConfig}
-          resetConfig={resetConfig}
         />
       </section>
 

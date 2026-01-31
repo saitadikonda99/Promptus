@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 export interface PresetSelectorProps {
   config: PromptConfig;
   updateConfig: (partial: Partial<PromptConfig>) => void;
-  resetConfig: () => void;
 }
 
 const PRESET_LABELS: Record<PresetKey, string> = {
@@ -32,7 +31,6 @@ const PRESET_KEYS: PresetKey[] = [
 export default function PresetSelector({
   config,
   updateConfig,
-  resetConfig,
 }: PresetSelectorProps) {
   const [activeKey, setActiveKey] = useState<PresetKey | null>(null);
 
@@ -44,10 +42,9 @@ export default function PresetSelector({
     toast.success("Preset applied");
   }
 
-  function handleReset() {
-    resetConfig();
+  function handleClearPreset() {
     setActiveKey(null);
-    toast.success("Configuration reset");
+    toast.success("Preset cleared");
   }
 
   return (
@@ -84,11 +81,11 @@ export default function PresetSelector({
       </div>
       <button
         type="button"
-        onClick={handleReset}
+        onClick={handleClearPreset}
         className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-        aria-label="Reset configuration to default"
+        aria-label="Clear preset selection"
       >
-        Reset to default
+        Clear preset
       </button>
     </div>
   );

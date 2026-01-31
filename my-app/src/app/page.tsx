@@ -14,7 +14,6 @@ export default function Home() {
     config,
     updateConfig,
     toggleComponent,
-    resetConfig,
     setConfig,
     resetSteps,
   } = usePromptConfig();
@@ -78,7 +77,6 @@ export default function Home() {
               config={config}
               updateConfig={updateConfig}
               toggleComponent={toggleComponent}
-              resetConfig={resetConfig}
             />
           </div>
         </section>
