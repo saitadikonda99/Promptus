@@ -1,11 +1,6 @@
 "use client";
 
 import type { CssFramework, Framework, PromptConfig } from "@/lib/types";
-import { Label } from "@/components/ui/label";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -13,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export interface FrameworkSectionProps {
   config: PromptConfig;
@@ -26,53 +22,61 @@ const FRAMEWORK_OPTIONS: { value: Framework; label: string }[] = [
   { value: "svelte", label: "Svelte" },
 ];
 
-const CSS_FRAMEWORK_OPTIONS: { value: CssFramework; label: string }[] = [
-  { value: "tailwind", label: "Tailwind" },
-  { value: "chakra", label: "Chakra UI" },
-  { value: "mui", label: "MUI" },
-  { value: "none", label: "None" },
+const CSS_FRAMEWORK_OPTIONS: { value: CssFramework; label: string; description?: string }[] = [
+  { value: "tailwind", label: "Tailwind", description: "Tailwind keeps it fast and consistent." },
+  { value: "chakra", label: "Chakra UI", description: "Chakra UI for accessible components." },
+  { value: "mui", label: "MUI", description: "Material UI for React." },
+  { value: "none", label: "None", description: "No CSS framework." },
 ];
 
 export default function FrameworkSection({
   config,
   updateConfig,
 }: FrameworkSectionProps) {
+  const cssDescription =
+    CSS_FRAMEWORK_OPTIONS.find((o) => o.value === config.cssFramework)?.description ?? "";
+
   return (
     <div className="space-y-6">
+      {/* Framework: button-style options */}
       <div className="space-y-3">
-        <Label className="text-foreground">Framework</Label>
-        <RadioGroup
-          value={config.framework}
-          onValueChange={(value) =>
-            updateConfig({ framework: value as Framework })
-          }
-          className="flex flex-col gap-3"
-        >
-          {FRAMEWORK_OPTIONS.map(({ value, label }) => (
-            <div key={value} className="flex items-center gap-3">
-              <RadioGroupItem value={value} id={`framework-${value}`} />
-              <Label
-                htmlFor={`framework-${value}`}
-                className="cursor-pointer font-normal text-foreground"
+        <div className="flex flex-col gap-2">
+          {FRAMEWORK_OPTIONS.map(({ value, label }) => {
+            const isSelected = config.framework === value;
+            return (
+              <button
+                key={value}
+                type="button"
+                onClick={() => updateConfig({ framework: value })}
+                aria-label={`Select ${label}`}
+                aria-pressed={isSelected}
+                className={cn(
+                  "flex w-full items-center rounded-xl border-2 px-4 py-2.5 text-left text-sm font-medium transition-colors",
+                  isSelected
+                    ? "border-primary bg-primary/10 text-foreground"
+                    : "border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted/50"
+                )}
               >
                 {label}
-              </Label>
-            </div>
-          ))}
-        </RadioGroup>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
+      {/* CSS: dropdown + description */}
       <div className="space-y-2">
-        <Label htmlFor="css-framework" className="text-foreground">
-          CSS framework
-        </Label>
+        <span className="text-sm font-medium text-foreground">CSS</span>
         <Select
           value={config.cssFramework}
           onValueChange={(value) =>
             updateConfig({ cssFramework: value as CssFramework })
           }
         >
-          <SelectTrigger id="css-framework" className="w-full">
+          <SelectTrigger
+            id="css-framework"
+            className="w-full rounded-xl border-2 border-border"
+          >
             <SelectValue placeholder="Select CSS framework" />
           </SelectTrigger>
           <SelectContent>
@@ -83,6 +87,9 @@ export default function FrameworkSection({
             ))}
           </SelectContent>
         </Select>
+        {cssDescription && (
+          <p className="text-muted-foreground text-xs">{cssDescription}</p>
+        )}
       </div>
     </div>
   );

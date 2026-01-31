@@ -1,24 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 import type { BuilderMode, PromptConfig } from "@/lib/types";
 import { parseImportedConfig } from "@/lib/types";
-import {
-  trackEvent,
-  getAnalytics,
-  clearAnalytics,
-  type AnalyticsEvent,
-} from "@/lib/analytics";
+import { trackEvent } from "@/lib/analytics";
 import { generatePrompt } from "@/lib/prompt-generator";
+import { copyToClipboard } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Copy, Download, Share2, FileJson, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -27,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const EXPORT_FILENAME = "promptforge-config.json";
+const EXPORT_FILENAME = "promptus-config.json";
 
 export interface PromptPreviewProps {
   config: PromptConfig;
@@ -45,13 +37,14 @@ const BUILDER_MODE_OPTIONS: { value: BuilderMode; label: string }[] = [
 ];
 
 function handleCopy(prompt: string): void {
-  navigator.clipboard.writeText(prompt).then(
-    () => {
+  copyToClipboard(prompt).then((ok) => {
+    if (ok) {
       trackEvent("prompt_copied");
       toast.success("Copied to clipboard");
-    },
-    () => toast.error("Failed to copy")
-  );
+    } else {
+      toast.error("Failed to copy");
+    }
+  });
 }
 
 function handleDownload(prompt: string): void {
@@ -157,23 +150,10 @@ export default function PromptPreview({
     handleImportConfig(file, setConfig, resetSteps);
   };
 
-  const [analyticsOpen, setAnalyticsOpen] = useState(false);
-  const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
-  const openAnalytics = () => {
-    setAnalyticsEvents(getAnalytics());
-    setAnalyticsOpen(true);
-  };
-  const clearAnalyticsAndClose = () => {
-    clearAnalytics();
-    setAnalyticsEvents([]);
-  };
-
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4 animate-in fade-in duration-200">
-      <header className="space-y-3">
-        <h3 className="text-sm font-medium text-foreground">
-          Generated Prompt
-        </h3>
+    <div className="flex h-full min-h-0 flex-col">
+      {/* Builder mode + character count */}
+      <div className="flex shrink-0 items-center justify-between gap-3 border-b border-border/60 bg-muted/20 px-5 py-3">
         <Select
           value={config.builderMode}
           onValueChange={(value) =>
@@ -181,7 +161,7 @@ export default function PromptPreview({
           }
         >
           <SelectTrigger
-            className="w-full transition-colors duration-150"
+            className="h-9 w-[160px] rounded-xl border-2 border-border bg-card text-sm font-medium shadow-sm"
             id="builder-mode"
             aria-label="Builder mode"
           >
@@ -195,30 +175,95 @@ export default function PromptPreview({
             ))}
           </SelectContent>
         </Select>
-      </header>
-
-      <div className="flex min-h-0 flex-1 flex-col gap-2">
-        {config.components.length === 0 && (
-          <p
-            className="text-muted-foreground shrink-0 rounded-none border border-dashed border-border bg-muted/20 px-3 py-4 text-center text-sm"
-            role="status"
-          >
-            Select components to generate a prompt.
-          </p>
-        )}
-        <textarea
-          readOnly
-          value={prompt}
-          className="border-input bg-muted/30 font-mono text-xs leading-relaxed w-full flex-1 min-h-[200px] resize-none overflow-auto rounded-none border p-3 outline-none transition-opacity duration-150"
-          spellCheck={false}
-          aria-label="Generated prompt"
-        />
-        <p className="text-muted-foreground shrink-0 text-xs">
-          {charCount.toLocaleString()} character{charCount !== 1 ? "s" : ""}
-        </p>
+        <span className="rounded-lg bg-primary/10 px-3 py-1 text-sm font-medium tabular-nums text-primary">
+          {charCount.toLocaleString()} chars
+        </span>
       </div>
 
-      <footer className="flex shrink-0 flex-wrap items-center gap-2 border-t border-border pt-4">
+      {/* Full-height markdown / code-editor style viewer (dark theme) — selectable, only this area scrolls */}
+      <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain select-text">
+        {config.components.length === 0 ? (
+          <div
+            className="flex h-full min-h-[200px] items-center justify-center border-b border-border/50 bg-muted/10 px-4"
+            role="status"
+          >
+            <p className="text-muted-foreground text-center text-sm">
+              Select components in Configuration to generate a prompt.
+            </p>
+          </div>
+        ) : (
+          <div className="border-border/50 bg-[#1e1e1e] font-mono text-[13px] leading-[1.6] text-[#d4d4d4] selection:bg-[#264f78] select-text cursor-text">
+            <div className="p-4 select-text">
+              <article className="prose prose-invert max-w-none select-text prose-headings:font-semibold prose-headings:text-[#d4d4d4] prose-p:my-2 prose-ul:my-2 prose-li:my-0.5 prose-strong:text-[#fff] prose-code:rounded prose-code:bg-[#2d2d2d] prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[#d4d4d4] prose-code:before:content-none prose-code:after:content-none prose-pre:my-2 prose-pre:rounded prose-pre:bg-[#2d2d2d] prose-pre:border prose-pre:border-[#404040] prose-pre:p-3 prose-pre:text-[13px]">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    p: ({ children }) => (
+                      <p className="mb-2 leading-relaxed">{children}</p>
+                    ),
+                    strong: ({ children }) => (
+                      <strong className="font-semibold text-[#fff]">{children}</strong>
+                    ),
+                    ul: ({ children }) => (
+                      <ul className="my-2 list-inside list-disc space-y-0.5">{children}</ul>
+                    ),
+                    ol: ({ children }) => (
+                      <ol className="my-2 list-inside list-decimal space-y-0.5">{children}</ol>
+                    ),
+                    li: ({ children }) => (
+                      <li className="leading-relaxed">{children}</li>
+                    ),
+                    code: ({ className, children, ...props }) => {
+                      const isBlock = className?.includes("language-");
+                      if (isBlock) {
+                        return (
+                          <pre className="my-2 overflow-x-auto rounded border border-[#404040] bg-[#2d2d2d] p-3 text-[13px]">
+                            <code {...props}>{children}</code>
+                          </pre>
+                        );
+                      }
+                      return (
+                        <code
+                          className="rounded bg-[#2d2d2d] px-1.5 py-0.5"
+                          {...props}
+                        >
+                          {children}
+                        </code>
+                      );
+                    },
+                    pre: ({ children }) => (
+                      <pre className="my-2 overflow-x-auto rounded border border-[#404040] bg-[#2d2d2d] p-3 text-[13px]">
+                        {children}
+                      </pre>
+                    ),
+                    h1: ({ children }) => (
+                      <h1 className="mb-2 mt-4 text-lg font-semibold text-[#fff] first:mt-0">
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 className="mb-2 mt-3 text-base font-semibold text-[#d4d4d4]">
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 className="mb-1 mt-2 text-sm font-semibold text-[#d4d4d4]">
+                        {children}
+                      </h3>
+                    ),
+                    hr: () => <hr className="my-3 border-[#404040]" />,
+                  }}
+                >
+                  {prompt}
+                </ReactMarkdown>
+              </article>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Sticky action bar - Locust-style buttons */}
+      <footer className="flex shrink-0 flex-wrap items-center gap-2 border-t border-border/60 bg-muted/20 px-5 py-3">
         <input
           ref={fileInputRef}
           type="file"
@@ -229,121 +274,60 @@ export default function PromptPreview({
         />
         <Button
           type="button"
-          variant="outline"
           size="sm"
-          className="transition-colors duration-150"
+          className="rounded-xl bg-secondary font-medium text-secondary-foreground shadow-sm hover:bg-secondary/90"
           onClick={() => handleCopy(prompt)}
           aria-label="Copy prompt to clipboard"
         >
+          <Copy className="mr-1.5 size-4" aria-hidden />
           Copy
         </Button>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="transition-colors duration-150"
+          className="rounded-xl border-2 border-border bg-card font-medium shadow-sm hover:bg-muted/50"
           onClick={() => handleDownload(prompt)}
           aria-label="Download prompt as text file"
         >
-          Download .txt
+          <Download className="mr-1.5 size-4" aria-hidden />
+          Download
         </Button>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="transition-colors duration-150"
+          className="rounded-xl border-2 border-border bg-card font-medium shadow-sm hover:bg-muted/50"
           onClick={() => handleShare(config)}
           aria-label="Copy share link to clipboard"
         >
-          Share link
+          <Share2 className="mr-1.5 size-4" aria-hidden />
+          Share
         </Button>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="transition-colors duration-150"
+          className="rounded-xl border-2 border-border bg-card font-medium shadow-sm hover:bg-muted/50"
           onClick={() => handleExportConfig(config)}
           aria-label="Export configuration as JSON"
         >
-          Export Config
+          <FileJson className="mr-1.5 size-4" aria-hidden />
+          Export
         </Button>
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="transition-colors duration-150"
+          className="rounded-xl border-2 border-border bg-card font-medium shadow-sm hover:bg-muted/50"
           onClick={onImportClick}
           disabled={!setConfig || !resetSteps}
           aria-label="Import configuration from JSON file"
         >
-          Import Config
-        </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground transition-colors duration-150"
-          onClick={openAnalytics}
-          aria-label="View local analytics"
-        >
-          Analytics
+          <Upload className="mr-1.5 size-4" aria-hidden />
+          Import
         </Button>
       </footer>
-
-      <Dialog open={analyticsOpen} onOpenChange={setAnalyticsOpen}>
-        <DialogContent className="max-h-[80vh] max-w-md overflow-hidden flex flex-col" showCloseButton>
-          <DialogHeader>
-            <DialogTitle>Local analytics</DialogTitle>
-            <p className="text-muted-foreground text-sm">
-              Last {analyticsEvents.length} events (stored in this device only).
-            </p>
-          </DialogHeader>
-          <div className="min-h-0 flex-1 overflow-y-auto rounded-none border border-border bg-muted/20 p-2">
-            {analyticsEvents.length === 0 ? (
-              <p className="text-muted-foreground py-4 text-center text-sm">No events yet.</p>
-            ) : (
-              <ul className="space-y-2 text-xs">
-                {analyticsEvents.map((evt, i) => (
-                  <li
-                    key={`${evt.timestamp}-${i}`}
-                    className="rounded-none border border-border bg-background p-2 font-mono"
-                  >
-                    <span className="font-semibold">{evt.name}</span>
-                    <span className="text-muted-foreground ml-2">
-                      {new Date(evt.timestamp).toLocaleString()}
-                    </span>
-                    {evt.payload != null && Object.keys(evt.payload).length > 0 && (
-                      <pre className="mt-1 overflow-x-auto whitespace-pre-wrap break-words text-[10px]">
-                        {JSON.stringify(evt.payload)}
-                      </pre>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <DialogFooter showCloseButton={false}>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={clearAnalyticsAndClose}
-              aria-label="Clear analytics data"
-            >
-              Clear
-            </Button>
-            <Button
-              type="button"
-              variant="default"
-              size="sm"
-              onClick={() => setAnalyticsOpen(false)}
-              aria-label="Close"
-            >
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

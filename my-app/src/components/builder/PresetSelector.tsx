@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import type { PromptConfig } from "@/lib/types";
 import { applyPreset, type PresetKey, PRESETS } from "@/lib/presets";
 import { trackEvent } from "@/lib/analytics";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export interface PresetSelectorProps {
@@ -52,36 +51,45 @@ export default function PresetSelector({
   }
 
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {PRESET_KEYS.map((key) => (
-          <Button
-            key={key}
-            type="button"
-            variant={activeKey === key ? "default" : "outline"}
-            size="sm"
-            className={cn(
-              "h-auto py-2 text-left font-normal transition-colors duration-150",
-              activeKey === key && "ring-2 ring-primary ring-offset-2"
-            )}
-            onClick={() => handlePreset(key)}
-            aria-label={`Apply ${PRESET_LABELS[key]} preset`}
-            aria-pressed={activeKey === key}
-          >
-            {PRESET_LABELS[key]}
-          </Button>
-        ))}
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {PRESET_KEYS.map((key) => {
+          const isSelected = activeKey === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => handlePreset(key)}
+              aria-label={`Apply ${PRESET_LABELS[key]} preset`}
+              aria-pressed={isSelected}
+              className={cn(
+                "flex flex-col items-start rounded-xl border-2 px-4 py-3 text-left transition-colors",
+                isSelected
+                  ? "border-primary bg-primary/10 text-foreground"
+                  : "border-border bg-card hover:border-primary/50 hover:bg-muted/50 text-foreground"
+              )}
+            >
+              <span className="font-medium">{PRESET_LABELS[key]}</span>
+              <span
+                className={cn(
+                  "mt-0.5 text-xs",
+                  isSelected ? "text-primary" : "text-muted-foreground"
+                )}
+              >
+                {isSelected ? "Selected" : "Tap to select"}
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <Button
+      <button
         type="button"
-        variant="ghost"
-        size="sm"
-        className="text-muted-foreground transition-colors duration-150"
         onClick={handleReset}
+        className="text-muted-foreground text-xs transition-colors hover:text-foreground"
         aria-label="Reset configuration to default"
       >
         Reset to default
-      </Button>
+      </button>
     </div>
   );
 }
